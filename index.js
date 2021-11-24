@@ -2,6 +2,8 @@ import '@logseq/libs';
 
 const main = async () => {
   console.log('Wordcount plugin loaded');
+
+  // Style for word counter
   logseq.provideStyle(`
     .wordcount-btn {
        border: 1px solid var(--ls-border-color); 
@@ -17,16 +19,15 @@ const main = async () => {
 
   let wordCountBlock;
 
+  // Insert renderer upon slash command
   logseq.Editor.registerSlashCommand('wordcount', async () => {
     await logseq.Editor.insertAtEditingCursor(`{{renderer :wordcount}} `);
     wordCountBlock = await logseq.Editor.getCurrentBlock();
   });
 
+  // Insert renderer
   logseq.App.onMacroRendererSlotted(async ({ slot, payload }) => {
     const [type] = payload.arguments;
-    const getParentBlock = await logseq.Editor.getBlock(wordCountBlock.uuid, {
-      includeChildren: true,
-    });
 
     const wordCountFunction = (str) => {
       return str.split(' ').filter(function (n) {
@@ -34,18 +35,31 @@ const main = async () => {
       }).length;
     };
 
-    const returnNumberOfWords = () => {
-      let numberOfChildBlocks = getParentBlock.children.length;
+    const getParentBlock = await logseq.Editor.getBlock(wordCountBlock.uuid, {
+      includeChildren: true,
+    });
+
+    const returnNumberOfWords = async () => {
       let totalWords = 0;
 
-      for (let i = 0; i < numberOfChildBlocks; i++) {
-        totalWords += wordCountFunction(getParentBlock.children[i].content);
-      }
+      // Begin recursion
+      const getCount = async (childrenArr) => {
+        for (let a = 0; a < childrenArr.length; a++) {
+          totalWords += wordCountFunction(childrenArr[a].content);
 
+          if (childrenArr[a].children) {
+            getCount(childrenArr[a].children);
+          } else {
+            return totalWords;
+          }
+        }
+      };
+
+      await getCount(getParentBlock.children);
       return totalWords;
     };
 
-    const totalWords = returnNumberOfWords();
+    const totalWords = await returnNumberOfWords();
 
     if (type !== ':wordcount') return;
     logseq.provideUI({

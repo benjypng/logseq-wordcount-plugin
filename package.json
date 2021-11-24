@@ -1,6 +1,6 @@
 {
   "name": "logseq-wordcount-plugin",
-  "version": "0.0.1",
+  "version": "1.0",
   "description": "",
   "main": "dist/index.html",
   "targets": {

@@ -17,27 +17,30 @@ const main = async () => {
     }
     `);
 
-  let wordCountBlock;
-
   // Insert renderer upon slash command
   logseq.Editor.registerSlashCommand('wordcount', async () => {
-    await logseq.Editor.insertAtEditingCursor(`{{renderer :wordcount}} `);
-    wordCountBlock = await logseq.Editor.getCurrentBlock();
+    await logseq.Editor.insertAtEditingCursor(`{{renderer :wordcount}}`);
   });
+
+  // Word count function
+  const wordCountFunction = (str) => {
+    return str.split(' ').filter(function (n) {
+      return n != '';
+    }).length;
+  };
 
   // Insert renderer
   logseq.App.onMacroRendererSlotted(async ({ slot, payload }) => {
     const [type] = payload.arguments;
 
-    const wordCountFunction = (str) => {
-      return str.split(' ').filter(function (n) {
-        return n != '';
-      }).length;
-    };
-
-    const getParentBlock = await logseq.Editor.getBlock(wordCountBlock.uuid, {
+    const pageBlocksTree = await logseq.Editor.getCurrentPageBlocksTree();
+    const findRendererObj = pageBlocksTree.find(
+      (o) => o.content === '{{renderer :wordcount}}'
+    );
+    const getParentBlock = await logseq.Editor.getBlock(findRendererObj.uuid, {
       includeChildren: true,
     });
+    console.log(getParentBlock);
 
     const returnNumberOfWords = async () => {
       let totalWords = 0;

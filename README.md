@@ -10,6 +10,8 @@ You can use more than 1 wordcounter in a single page. Just prefix the blocks you
 
 Happy counting!
 
+(Please note that this plugin only works on journal pages and regular pages. It does not work on the homepage yet.)
+
 # Installation
 
 Run `npm i && npm run build` and manually load plugin in Logseq

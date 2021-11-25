@@ -4,7 +4,7 @@
 
 # Usage
 
-Use `/wordcount`. It will then count the number of words below this parent block. Currently, it only counts the immediate child block, but does not count the number of words in the grandchildren block.
+Use `/wordcount`. It will then count the number of words below this parent block. This supports an unlimited number of nested blocks.
 
 # Installation
 

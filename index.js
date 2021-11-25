@@ -17,9 +17,17 @@ const main = async () => {
     }
     `);
 
+  // Generate unique identifier
+  const uniqueIdentifier = () =>
+    Math.random()
+      .toString(36)
+      .replace(/[^a-z]+/g, '');
+
   // Insert renderer upon slash command
   logseq.Editor.registerSlashCommand('wordcount', async () => {
-    await logseq.Editor.insertAtEditingCursor(`{{renderer :wordcount}}`);
+    await logseq.Editor.insertAtEditingCursor(
+      `{{renderer :wordcount_${uniqueIdentifier()}}}`
+    );
   });
 
   // Word count function
@@ -33,14 +41,20 @@ const main = async () => {
   logseq.App.onMacroRendererSlotted(async ({ slot, payload }) => {
     const [type] = payload.arguments;
 
+    // Generate unique identifier for macro renderer so that more than one word counter can be implemented in the same page
+    const id = type.split('_')[1]?.trim();
+    const wordcountId = `wordcount_${id}`;
+
+    // Find word counter block so as to track children under it
     const pageBlocksTree = await logseq.Editor.getCurrentPageBlocksTree();
     const findRendererObj = pageBlocksTree.find(
-      (o) => o.content === '{{renderer :wordcount}}'
+      (o) => o.content === `{{renderer :${wordcountId}}}`
     );
     const getParentBlock = await logseq.Editor.getBlock(findRendererObj.uuid, {
       includeChildren: true,
     });
 
+    // Function to retrieve number of words
     const returnNumberOfWords = async () => {
       let totalWords = 0;
 
@@ -63,13 +77,13 @@ const main = async () => {
 
     const totalWords = await returnNumberOfWords();
 
-    if (type !== ':wordcount') return;
+    if (!type.startsWith(':wordcount_')) return;
     logseq.provideUI({
-      key: 'logseq wordcount plugin',
+      key: `${wordcountId}`,
       slot,
       reset: true,
       template: `
-      <button class="wordcount-btn">Word count: ${totalWords}</button>
+      <button class="wordcount-btn" data-slot-id="${slot}" data-wordcount-id="${wordcountId}">Word count: ${totalWords}</button>
      `,
     });
   });

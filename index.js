@@ -40,7 +40,6 @@ const main = async () => {
     const getParentBlock = await logseq.Editor.getBlock(findRendererObj.uuid, {
       includeChildren: true,
     });
-    console.log(getParentBlock);
 
     const returnNumberOfWords = async () => {
       let totalWords = 0;

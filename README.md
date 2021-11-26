@@ -18,10 +18,12 @@ Happy counting!
 # Installation
 
 **Option 1**
+
 Clone the repository.
 Run `npm i && npm run build` and manually load the plugin in Logseq.
 
 **Option 2**
+
 Download the [latest release](https://github.com/hkgnp/logseq-wordcount-plugin/releases) and after extracting the zip file, manually load the plugin in Logseq.
 
 # Credits

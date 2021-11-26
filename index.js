@@ -62,7 +62,7 @@ const main = async () => {
       // Begin recursion
       const getCount = async (childrenArr) => {
         for (let a = 0; a < childrenArr.length; a++) {
-          totalWords += wordsCount(childrenArr[a].content);
+          totalWords += wordCountFunction(childrenArr[a].content);
 
           if (childrenArr[a].children) {
             getCount(childrenArr[a].children);

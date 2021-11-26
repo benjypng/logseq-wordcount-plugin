@@ -1,5 +1,4 @@
 import '@logseq/libs';
-import wordsCount from 'words-count';
 
 const main = async () => {
   console.log('Wordcount plugin loaded');
@@ -30,13 +29,6 @@ const main = async () => {
       `{{renderer :wordcount_${uniqueIdentifier()}}}`
     );
   });
-
-  // Word count function
-  const wordCountFunction = (str) => {
-    return str.split(' ').filter(function (n) {
-      return n != '';
-    }).length;
-  };
 
   // Credit to https://stackoverflow.com/users/11854986/ken-lee for the below function
   const mixedWordsFunction = (str) => {

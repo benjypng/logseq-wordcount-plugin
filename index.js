@@ -1,4 +1,5 @@
 import '@logseq/libs';
+import wordsCount from 'words-count';
 
 const main = async () => {
   console.log('Wordcount plugin loaded');
@@ -61,7 +62,7 @@ const main = async () => {
       // Begin recursion
       const getCount = async (childrenArr) => {
         for (let a = 0; a < childrenArr.length; a++) {
-          totalWords += wordCountFunction(childrenArr[a].content);
+          totalWords += wordsCount(childrenArr[a].content);
 
           if (childrenArr[a].children) {
             getCount(childrenArr[a].children);

@@ -14,7 +14,8 @@
   "author": "hkgnp",
   "license": "ISC",
   "dependencies": {
-    "@logseq/libs": "0.0.1-alpha.30"
+    "@logseq/libs": "0.0.1-alpha.30",
+    "words-count": "^2.0.2"
   },
   "logseq": {
     "id": "logseq-wordcount-plugin",

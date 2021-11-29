@@ -33,7 +33,7 @@ const main = async () => {
   // Credit to https://stackoverflow.com/users/11854986/ken-lee for the below function
   const mixedWordsFunction = (str) => {
     /// fix problem in special characters such as middle-dot, etc.
-    str = str.replace(/[\u007F-\u00FE]/g, ' ');
+    str = str.replace(/[\u007F-\u00FE.,\/#!$%\^&\*;:{}=\-_`~()>]/g, ' ');
 
     /// make a duplicate first...
     let str1 = str;

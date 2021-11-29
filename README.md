@@ -1,3 +1,5 @@
+![GitHub all releases](https://img.shields.io/github/downloads/hkgnp/logseq-todoist-plugin/total)
+
 # Introduction
 
 ![](screenshots/wordcount.gif)

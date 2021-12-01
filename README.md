@@ -17,14 +17,30 @@ Happy counting!
 
 (Please note that this plugin only works on journal pages and regular pages. It does not work on the homepage yet.)
 
+# Styling the Wordcount button
+
+You can style the wordcount button using the class `.wordcount-btn`. Simply add it into your `custom.css`.
+
+Example:
+
+```
+.wordcount-btn {
+    border-color: red;
+    font-size: 2em;
+}
+```
+
 # Installation
 
 **Option 1**
+Install from the Logseq marketplace.
+
+**Option 2**
 
 Clone the repository.
 Run `npm i && npm run build` and manually load the plugin in Logseq.
 
-**Option 2**
+**Option 3**
 
 Download the [latest release](https://github.com/hkgnp/logseq-wordcount-plugin/releases) and after extracting the zip file, manually load the plugin in Logseq.
 

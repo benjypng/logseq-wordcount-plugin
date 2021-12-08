@@ -19,7 +19,8 @@
   },
   "logseq": {
     "id": "logseq-wordcount-plugin",
-    "title": "logseq-wordcount-plugin"
+    "title": "logseq-wordcount-plugin",
+    "icon": "./icon.png"
   },
   "devDependencies": {
     "parcel": "^2.0.0"

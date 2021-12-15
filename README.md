@@ -2,10 +2,6 @@
 
 > v1.4 now allows the counting to be done on the homepage too!
 
-=======
-
-> > > > > > > 236abe394bba60c0feafb0f0d12692ad22a74173
-
 # Introduction
 
 ![](screenshots/wordcount.gif)

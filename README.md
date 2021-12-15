@@ -1,5 +1,7 @@
 ![GitHub all releases](https://img.shields.io/github/downloads/hkgnp/logseq-wordcount-plugin/total)
 
+> v1.4 now allows the counting to be done on the homepage too!
+
 # Introduction
 
 ![](screenshots/wordcount.gif)
@@ -14,8 +16,6 @@ It also supports counting sentences that have both English and Chinese/ Japanese
 E.g. `敏捷的棕色狐狸跳过了懒狗 is a funny phrase` returns 16 words.
 
 Happy counting!
-
-(Please note that this plugin only works on journal pages and regular pages. It does not work on the homepage yet.)
 
 # Styling the Wordcount button
 

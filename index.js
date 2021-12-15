@@ -57,6 +57,7 @@ const main = async () => {
 
   // Insert renderer
   logseq.App.onMacroRendererSlotted(async ({ slot, payload }) => {
+    const uuid = payload.uuid;
     const [type] = payload.arguments;
 
     // Generate unique identifier for macro renderer so that more than one word counter can be implemented in the same page
@@ -64,13 +65,12 @@ const main = async () => {
     const wordcountId = `wordcount_${id}`;
 
     // Find word counter block so as to track children under it
-    const pageBlocksTree = await logseq.Editor.getCurrentPageBlocksTree();
-    const findRendererObj = pageBlocksTree.find(
-      (o) => o.content === `{{renderer :${wordcountId}}}`
-    );
-    const getParentBlock = await logseq.Editor.getBlock(findRendererObj.uuid, {
+    const headerBlock = await logseq.Editor.getBlock(uuid, {
       includeChildren: true,
     });
+    const findRendererObj = headerBlock.children.find(
+      (o) => o.content === `{{renderer :${wordcountId}}}`
+    );
 
     // Function to retrieve number of words
     const returnNumberOfWords = async () => {
@@ -89,7 +89,7 @@ const main = async () => {
         }
       };
 
-      await getCount(getParentBlock.children);
+      await getCount(headerBlock.children);
       return totalWords;
     };
 

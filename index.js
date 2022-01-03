@@ -30,6 +30,13 @@ const main = async () => {
     );
   });
 
+  // Insert renderer upon slash command
+  logseq.Editor.registerSlashCommand('wordcount char', async () => {
+    await logseq.Editor.insertAtEditingCursor(
+      `{{renderer :wordcountchar_${uniqueIdentifier()}}}`
+    );
+  });
+
   // Credit to https://stackoverflow.com/users/11854986/ken-lee for the below function
   const mixedWordsFunction = (str) => {
     /// fix problem in special characters such as middle-dot, etc.
@@ -68,42 +75,66 @@ const main = async () => {
     const headerBlock = await logseq.Editor.getBlock(uuid, {
       includeChildren: true,
     });
-    const findRendererObj = headerBlock.children.find(
-      (o) => o.content === `{{renderer :${wordcountId}}}`
-    );
 
     // Function to retrieve number of words
-    const returnNumberOfWords = async () => {
-      let totalWords = 0;
+    const returnNumberOfWords = async (type) => {
+      let totalCount = 0;
 
-      // Begin recursion
-      const getCount = async (childrenArr) => {
-        for (let a = 0; a < childrenArr.length; a++) {
-          totalWords += mixedWordsFunction(childrenArr[a].content);
+      if (
+        !type.startsWith(':wordcountchar_') &&
+        !type.startsWith(':wordcount_')
+      ) {
+        return;
+      } else if (type.startsWith(':wordcount_')) {
+        // Begin recursion
+        const getCount = async (childrenArr) => {
+          for (let a = 0; a < childrenArr.length; a++) {
+            totalCount += mixedWordsFunction(childrenArr[a].content);
 
-          if (childrenArr[a].children) {
-            getCount(childrenArr[a].children);
-          } else {
-            return totalWords;
+            if (childrenArr[a].children) {
+              getCount(childrenArr[a].children);
+            } else {
+              return totalCount;
+            }
           }
-        }
-      };
+        };
 
-      await getCount(headerBlock.children);
-      return totalWords;
+        await getCount(headerBlock.children);
+        logseq.provideUI({
+          key: `${wordcountId}`,
+          slot,
+          reset: true,
+          template: `
+          <button class="wordcount-btn" data-slot-id="${slot}" data-wordcount-id="${wordcountId}">Word count: ${totalCount}</button>
+         `,
+        });
+      } else if (type.startsWith(':wordcountchar_')) {
+        // Begin recursion
+        const getCount = async (childrenArr) => {
+          for (let a = 0; a < childrenArr.length; a++) {
+            totalCount += childrenArr[a].content.length;
+
+            if (childrenArr[a].children) {
+              getCount(childrenArr[a].children);
+            } else {
+              return totalCount;
+            }
+          }
+        };
+
+        await getCount(headerBlock.children);
+        logseq.provideUI({
+          key: `${wordcountId}`,
+          slot,
+          reset: true,
+          template: `
+          <button class="wordcount-btn" data-slot-id="${slot}" data-wordcount-id="${wordcountId}">Character count: ${totalCount}</button>
+         `,
+        });
+      }
     };
 
-    const totalWords = await returnNumberOfWords();
-
-    if (!type.startsWith(':wordcount_')) return;
-    logseq.provideUI({
-      key: `${wordcountId}`,
-      slot,
-      reset: true,
-      template: `
-      <button class="wordcount-btn" data-slot-id="${slot}" data-wordcount-id="${wordcountId}">Word count: ${totalWords}</button>
-     `,
-    });
+    await returnNumberOfWords(type);
   });
 };
 

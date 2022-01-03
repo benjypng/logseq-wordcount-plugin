@@ -10,10 +10,11 @@
 
 Use `/wordcount`. It will then count the number of words below this parent block. This supports an unlimited number of nested blocks.
 
-You can use more than 1 wordcounter in a single page. Just prefix the blocks you would like to count with another `/wordcount`.
+You can use more than 1 word counter in a single page. Just prefix the blocks you would like to count with another `/wordcount`.
 
-It also supports counting sentences that have both English and Chinese/ Japanese words.
-E.g. `敏捷的棕色狐狸跳过了懒狗 is a funny phrase` returns 16 words.
+It also supports counting sentences that have both English and Chinese/ Japanese words. E.g. `敏捷的棕色狐狸跳过了懒狗 is a funny phrase` returns 16 words.
+
+You can also use `/wordcount char` to count the number of characters (including spaces) instead of words.
 
 Happy counting!
 

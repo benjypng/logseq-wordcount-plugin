@@ -14,7 +14,7 @@ You can use more than 1 word counter in a single page. Just prefix the blocks yo
 
 It also supports counting sentences that have both English and Chinese/ Japanese words. E.g. `敏捷的棕色狐狸跳过了懒狗 is a funny phrase` returns 16 words.
 
-You can also use `/wordcount char` to count the number of characters (including spaces) instead of words.
+You can also use `/character count` to count the number of characters (including spaces) instead of words.
 
 Happy counting!
 

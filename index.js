@@ -31,7 +31,7 @@ const main = async () => {
   });
 
   // Insert renderer upon slash command
-  logseq.Editor.registerSlashCommand('wordcount char', async () => {
+  logseq.Editor.registerSlashCommand('character count', async () => {
     await logseq.Editor.insertAtEditingCursor(
       `{{renderer :wordcountchar_${uniqueIdentifier()}}}`
     );

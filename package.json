@@ -1,7 +1,7 @@
 {
   "name": "logseq-wordcount-plugin",
-  "version": "1.5",
-  "description": "Simple word counter that calculates the number of words across all nested blocks!",
+  "version": "1.6",
+  "description": "Simple word and character counter that calculates the number of words across all nested blocks!",
   "main": "dist/index.html",
   "targets": {
     "main": false

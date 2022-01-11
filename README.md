@@ -31,23 +31,17 @@ Example:
 }
 ```
 
+# Migratin from Roam
+
+Roam uses `{{word-count}}`. All you need to do is to replace each instance of `{{word-count}}` with `{{renderer :wordcount_abc123}}` (abc123 can be any other string you want). You can also a use a terminal command (in MacOS or Linux) to do so. In terminal, navigate to the folder (e.g. pages) and run the following command.
+
+```
+find . -type f -name '*.md' -exec sed -i '' s/word-count/renderer\ :wordcount_abc123/g {} +
+```
+
 # Installation
 
-**Option 1**
-Install from the Logseq marketplace.
-
-**Option 2**
-
-Clone the repository.
-Run `npm i && npm run build` and manually load the plugin in Logseq.
-
-**Option 3**
-
-Download the [latest release](https://github.com/hkgnp/logseq-wordcount-plugin/releases) and after extracting the zip file, manually load the plugin in Logseq.
-
-# Help
-
-Please look for me on Discord or open an issue if you have any feedback!
+Install from the marketplace.
 
 # Credits
 

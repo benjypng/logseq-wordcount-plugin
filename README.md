@@ -31,7 +31,7 @@ Example:
 }
 ```
 
-# Migratin from Roam
+# Migrating from Roam
 
 Roam uses `{{word-count}}`. All you need to do is to replace each instance of `{{word-count}}` with `{{renderer :wordcount_abc123}}` (abc123 can be any other string you want). You can also a use a terminal command (in MacOS or Linux) to do so. In terminal, navigate to the folder (e.g. pages) and run the following command.
 

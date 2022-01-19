@@ -122,7 +122,8 @@ const main = async () => {
           }
         };
 
-        await getCount(headerBlock.children);
+        headerBlock.children ? await getCount(headerBlock.children) : '';
+
         logseq.provideUI({
           key: `${wordcountId}`,
           slot,

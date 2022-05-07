@@ -1,7 +1,17 @@
-import '@logseq/libs';
+import "@logseq/libs";
+import { callSettings } from "./callSettings";
+import { mixedWordsFunction } from "./mixedWordsFunction";
+
+// Generate unique identifier
+const uniqueIdentifier = () =>
+  Math.random()
+    .toString(36)
+    .replace(/[^a-z]+/g, "");
 
 const main = async () => {
-  console.log('Wordcount plugin loaded');
+  console.log("Wordcount plugin loaded");
+
+  callSettings();
 
   // Style for word counter
   logseq.provideStyle(`
@@ -17,50 +27,19 @@ const main = async () => {
     }
     `);
 
-  // Generate unique identifier
-  const uniqueIdentifier = () =>
-    Math.random()
-      .toString(36)
-      .replace(/[^a-z]+/g, '');
-
   // Insert renderer upon slash command
-  logseq.Editor.registerSlashCommand('wordcount', async () => {
+  logseq.Editor.registerSlashCommand("Word count", async () => {
     await logseq.Editor.insertAtEditingCursor(
       `{{renderer :wordcount_${uniqueIdentifier()}}}`
     );
   });
 
   // Insert renderer upon slash command
-  logseq.Editor.registerSlashCommand('character count', async () => {
+  logseq.Editor.registerSlashCommand("Character count", async () => {
     await logseq.Editor.insertAtEditingCursor(
       `{{renderer :wordcountchar_${uniqueIdentifier()}}}`
     );
   });
-
-  // Credit to https://stackoverflow.com/users/11854986/ken-lee for the below function
-  const mixedWordsFunction = (str) => {
-    /// fix problem in special characters such as middle-dot, etc.
-    str = str.replace(/[\u007F-\u00FE.,\/#!$%\^&\*;:{}=\-_`~()>\\]/g, ' ');
-
-    /// make a duplicate first...
-    let str1 = str;
-    let str2 = str;
-
-    /// the following remove all chinese characters and then count the number of english characters in the string
-    str1 = str1.replace(/[^!-~\d\s]+/gi, ' ');
-
-    /// the following remove all english characters and then count the number of chinese characters in the string
-    str2 = str2.replace(/[!-~\d\s]+/gi, '');
-
-    const matches1 = str1.match(/[\u00ff-\uffff]|\S+/g);
-    const matches2 = str2.match(/[\u00ff-\uffff]|\S+/g);
-
-    const count1 = matches1 ? matches1.length : 0;
-    const count2 = matches2 ? matches2.length : 0;
-
-    /// return the total of the mixture
-    return count1 + count2;
-  };
 
   // Insert renderer
   logseq.App.onMacroRendererSlotted(async ({ slot, payload }) => {
@@ -68,7 +47,7 @@ const main = async () => {
     const [type] = payload.arguments;
 
     // Generate unique identifier for macro renderer so that more than one word counter can be implemented in the same page
-    const id = type.split('_')[1]?.trim();
+    const id = type.split("_")[1]?.trim();
     const wordcountId = `wordcount_${id}`;
 
     // Find word counter block so as to track children under it
@@ -81,11 +60,11 @@ const main = async () => {
       let totalCount = 0;
 
       if (
-        !type.startsWith(':wordcountchar_') &&
-        !type.startsWith(':wordcount_')
+        !type.startsWith(":wordcountchar_") &&
+        !type.startsWith(":wordcount_")
       ) {
         return;
-      } else if (type.startsWith(':wordcount_')) {
+      } else if (type.startsWith(":wordcount_")) {
         // Begin recursion
         const getCount = async (childrenArr) => {
           for (let a = 0; a < childrenArr.length; a++) {
@@ -105,10 +84,10 @@ const main = async () => {
           slot,
           reset: true,
           template: `
-          <button class="wordcount-btn" data-slot-id="${slot}" data-wordcount-id="${wordcountId}">Word count: ${totalCount}</button>
+          <button class="wordcount-btn" data-slot-id="${slot}" data-wordcount-id="${wordcountId}">${logseq.settings.wordCountStr} ${totalCount}</button>
          `,
         });
-      } else if (type.startsWith(':wordcountchar_')) {
+      } else if (type.startsWith(":wordcountchar_")) {
         // Begin recursion
         const getCount = async (childrenArr) => {
           for (let a = 0; a < childrenArr.length; a++) {
@@ -122,14 +101,14 @@ const main = async () => {
           }
         };
 
-        headerBlock.children ? await getCount(headerBlock.children) : '';
+        headerBlock.children ? await getCount(headerBlock.children) : "";
 
         logseq.provideUI({
           key: `${wordcountId}`,
           slot,
           reset: true,
           template: `
-          <button class="wordcount-btn" data-slot-id="${slot}" data-wordcount-id="${wordcountId}">Character count: ${totalCount}</button>
+          <button class="wordcount-btn" data-slot-id="${slot}" data-wordcount-id="${wordcountId}">${logseq.settings.characterCountStr} ${totalCount}</button>
          `,
         });
       }

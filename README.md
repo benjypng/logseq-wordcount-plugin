@@ -18,7 +18,7 @@ You can also use `/character count` to count the number of characters (including
 
 Happy counting!
 
-# Styling the Wordcount button
+# Styling the wordcount button
 
 You can style the wordcount button using the class `.wordcount-btn`. Simply add it into your `custom.css`.
 
@@ -30,6 +30,12 @@ Example:
     font-size: 2em;
 }
 ```
+
+# Customising text in the wordcount button
+
+Go to plugin settings, and make the changes as you like.
+
+![](/screenshots/settings.png)
 
 # Migrating from Roam
 

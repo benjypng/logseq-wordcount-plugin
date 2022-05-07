@@ -7,14 +7,14 @@ export const callSettings = () => {
       type: "string",
       default: "Word count:",
       description: "Customise the text that is shown in the word-counter.",
-      title: "Customise wordcount text",
+      title: "Customise word count text",
     },
     {
       key: "characterCountStr",
       type: "string",
       default: "Character count:",
       description: "Customise the text that is shown in the character-counter.",
-      title: "Customise wordcount text",
+      title: "Customise character count text",
     },
   ];
   logseq.useSettingsSchema(settings);

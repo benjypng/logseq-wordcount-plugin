@@ -35,6 +35,13 @@ const main = async () => {
   });
 
   // Insert renderer upon slash command
+  logseq.Editor.registerSlashCommand("Writing session target", async () => {
+    await logseq.Editor.insertAtEditingCursor(
+      `{{renderer :wordcount_${uniqueIdentifier()}, 500}}`
+    );
+  });
+
+  // Insert renderer upon slash command
   logseq.Editor.registerSlashCommand("Character count", async () => {
     await logseq.Editor.insertAtEditingCursor(
       `{{renderer :wordcountchar_${uniqueIdentifier()}}}`
@@ -44,7 +51,7 @@ const main = async () => {
   // Insert renderer
   logseq.App.onMacroRendererSlotted(async ({ slot, payload }) => {
     const uuid = payload.uuid;
-    const [type] = payload.arguments;
+    const [type, target] = payload.arguments;
 
     // Generate unique identifier for macro renderer so that more than one word counter can be implemented in the same page
     const id = type.split("_")[1]?.trim();
@@ -79,17 +86,30 @@ const main = async () => {
         };
 
         await getCount(headerBlock.children);
-        logseq.provideUI({
-          key: `${wordcountId}`,
-          slot,
-          reset: true,
-          template: `
+
+        if (target === undefined) {
+          logseq.provideUI({
+            key: `${wordcountId}`,
+            slot,
+            reset: true,
+            template: `
           <button class="wordcount-btn" data-slot-id="${slot}" data-wordcount-id="${wordcountId}">${logseq.settings.wordCountStr} ${totalCount}</button>
          `,
-        });
+          });
+        } else {
+          const percentage = (totalCount / parseInt(target)) * 100;
+          logseq.provideUI({
+            key: `${wordcountId}`,
+            slot,
+            reset: true,
+            template: `
+          <button class="wordcount-btn" data-slot-id="${slot}" data-wordcount-id="${wordcountId}">Writing Target: ${percentage}% (${totalCount}/${target})</button>
+         `,
+          });
+        }
       } else if (type.startsWith(":wordcountchar_")) {
         // Begin recursion
-        const getCount = async (childrenArr) => {
+        const getCount = async (childrenArr: any[]) => {
           for (let a = 0; a < childrenArr.length; a++) {
             totalCount += childrenArr[a].content.length;
 

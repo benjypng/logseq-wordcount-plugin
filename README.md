@@ -4,6 +4,8 @@
 
 ![](screenshots/wordcount.gif)
 
+![](screenshots/writing_session.gif)
+
 # Usage
 
 Use `/wordcount`. It will then count the number of words below this parent block. This supports an unlimited number of nested blocks.

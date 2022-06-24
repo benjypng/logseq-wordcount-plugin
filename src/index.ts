@@ -97,7 +97,7 @@ const main = async () => {
          `,
           });
         } else {
-          const percentage = (totalCount / parseInt(target)) * 100;
+          const percentage = Math.round((totalCount / parseInt(target)) * 100);
           logseq.provideUI({
             key: `${wordcountId}`,
             slot,

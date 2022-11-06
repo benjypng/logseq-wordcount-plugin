@@ -1,6 +1,6 @@
 {
   "name": "logseq-wordcount-plugin",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "description": "Simple word and character counter that calculates the number of words across all nested blocks!",
   "main": "dist/index.html",
   "targets": {
@@ -14,7 +14,7 @@
   "author": "hkgnp",
   "license": "ISC",
   "dependencies": {
-    "@logseq/libs": "^0.0.6",
+    "@logseq/libs": "^0.0.10",
     "words-count": "^2.0.2"
   },
   "logseq": {
@@ -23,6 +23,6 @@
     "icon": "./icon.png"
   },
   "devDependencies": {
-    "parcel": "^2.5.0"
+    "parcel": "^2.7.0"
   }
 }

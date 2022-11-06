@@ -51,7 +51,7 @@ const main = async () => {
 
   logseq.Editor.registerSlashCommand("Tweet target", async () => {
     await logseq.Editor.insertAtEditingCursor(
-      `{{renderer :wordcountchar_${uniqueIdentifier()}, 160}}`
+      `{{renderer :wordcountchar_${uniqueIdentifier()}, 280}}`
     );
   });
 

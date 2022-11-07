@@ -1,5 +1,5 @@
 // Credit to https://stackoverflow.com/users/11854986/ken-lee for the below function
-export const mixedWordsFunction = (str: string) => {
+export function mixedWordsFunction(str: string) {
   /// fix problem in special characters such as middle-dot, etc.
   str = str.replace(/[\u007F-\u00FE.,\/#!$%\^&\*;:{}=\-_`~()>\\]/g, " ");
 
@@ -21,4 +21,11 @@ export const mixedWordsFunction = (str: string) => {
 
   /// return the total of the mixture
   return count1 + count2;
-};
+}
+
+// To force counting of Cyrillic characters as words, e.g. for Russian
+export function simpleWordsFunction(str: string) {
+  return str.split(" ").filter(function (n) {
+    return n != "";
+  }).length;
+}

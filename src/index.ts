@@ -1,7 +1,7 @@
 import "@logseq/libs";
 import { BlockEntity } from "@logseq/libs/dist/LSPlugin.user";
 import { callSettings } from "./callSettings";
-import { mixedWordsFunction } from "./mixedWordsFunction";
+import { mixedWordsFunction, simpleWordsFunction } from "./mixedWordsFunction";
 
 // Generate unique identifier
 const uniqueIdentifier = () =>
@@ -82,7 +82,11 @@ const main = async () => {
         // Begin recursion
         const getCount = async (childrenArr: BlockEntity[]) => {
           for (let a = 0; a < childrenArr.length; a++) {
-            totalCount += mixedWordsFunction(childrenArr[a].content);
+            if (logseq.settings!.forceWordCount) {
+              totalCount += simpleWordsFunction(childrenArr[a].content);
+            } else {
+              totalCount += mixedWordsFunction(childrenArr[a].content);
+            }
 
             if (childrenArr[a].children) {
               getCount(childrenArr[a].children as BlockEntity[]);

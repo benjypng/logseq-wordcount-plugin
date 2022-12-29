@@ -62,7 +62,7 @@ const main = async () => {
 
     // Generate unique identifier for macro renderer so that more than one word counter can be implemented in the same page
     const id = type.split("_")[1]?.trim();
-    const wordcountId = `wordcount_${id}`;
+    const wordcountId = `wordcount_${id}_${slot}`;
 
     // Find word counter block so as to track children under it
     const headerBlock = await logseq.Editor.getBlock(uuid, {

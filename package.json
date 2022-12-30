@@ -11,7 +11,7 @@
   },
   "keywords": [],
   "author": "hkgnp",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@logseq/libs": "^0.0.10",
     "words-count": "^2.0.2"
@@ -22,6 +22,7 @@
     "icon": "./icon.png"
   },
   "devDependencies": {
+    "os-browserify": "^0.3.0",
     "parcel": "^2.7.0"
   }
 }

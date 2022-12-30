@@ -22,7 +22,6 @@
     "icon": "./icon.png"
   },
   "devDependencies": {
-    "os-browserify": "^0.3.0",
     "parcel": "^2.7.0"
   }
 }

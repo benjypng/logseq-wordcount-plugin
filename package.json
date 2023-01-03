@@ -13,7 +13,7 @@
   "author": "hkgnp",
   "license": "MIT",
   "dependencies": {
-    "@logseq/libs": "^0.0.10",
+    "@logseq/libs": "^0.0.14",
     "words-count": "^2.0.2"
   },
   "logseq": {
@@ -22,6 +22,6 @@
     "icon": "./icon.png"
   },
   "devDependencies": {
-    "parcel": "^2.7.0"
+    "parcel": "^2.8.2"
   }
 }

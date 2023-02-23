@@ -1,18 +1,11 @@
 import "@logseq/libs";
 import { BlockEntity } from "@logseq/libs/dist/LSPlugin.user";
-import { callSettings } from "./callSettings";
-import { mixedWordsFunction, simpleWordsFunction } from "./mixedWordsFunction";
-
-// Generate unique identifier
-const uniqueIdentifier = () =>
-  Math.random()
-    .toString(36)
-    .replace(/[^a-z]+/g, "");
+import getCount from "./services/getCount";
+import renderCount from "./services/renderCount";
+import { settings } from "./services/settings";
 
 const main = async () => {
   console.log("Wordcount plugin loaded");
-
-  callSettings();
 
   // Style for word counter
   logseq.provideStyle(`
@@ -28,141 +21,45 @@ const main = async () => {
     }
     `);
 
-  // Insert renderer upon slash command
   logseq.Editor.registerSlashCommand("Word count", async () => {
-    await logseq.Editor.insertAtEditingCursor(
-      `{{renderer :wordcount_${uniqueIdentifier()}}}`
-    );
+    await logseq.Editor.insertAtEditingCursor(`{{renderer :wordcount_}}`);
   });
 
-  // Insert renderer upon slash command
   logseq.Editor.registerSlashCommand("Writing session target", async () => {
-    await logseq.Editor.insertAtEditingCursor(
-      `{{renderer :wordcount_${uniqueIdentifier()}, 500}}`
-    );
+    await logseq.Editor.insertAtEditingCursor(`{{renderer :wordcount_, 500}}`);
   });
 
-  // Insert renderer upon slash command
   logseq.Editor.registerSlashCommand("Character count", async () => {
-    await logseq.Editor.insertAtEditingCursor(
-      `{{renderer :wordcountchar_${uniqueIdentifier()}}}`
-    );
-  });
-
-  logseq.Editor.registerSlashCommand("Tweet target", async () => {
-    await logseq.Editor.insertAtEditingCursor(
-      `{{renderer :wordcountchar_${uniqueIdentifier()}, 280}}`
-    );
+    await logseq.Editor.insertAtEditingCursor(`{{renderer :wordcountchar_}}`);
   });
 
   // Insert renderer
   logseq.App.onMacroRendererSlotted(async ({ slot, payload }) => {
     const uuid = payload.uuid;
     const [type, target] = payload.arguments;
+    if (!type.startsWith(":wordcountchar_") && !type.startsWith(":wordcount_"))
+      return;
 
-    // Generate unique identifier for macro renderer so that more than one word counter can be implemented in the same page
-    const id = type.split("_")[1]?.trim();
-    const wordcountId = `wordcount_${id}_${slot}`;
+    const wordcountId = `wordcount_${type.split("_")[1]?.trim()}_${slot}`;
 
-    // Find word counter block so as to track children under it
     const headerBlock = await logseq.Editor.getBlock(uuid, {
       includeChildren: true,
     });
 
-    // Function to retrieve number of words
-    const returnNumberOfWords = async (type: string) => {
-      let totalCount = 0;
+    let totalCount: number = 0;
+    if (type.startsWith(":wordcount_")) {
+      totalCount = getCount(headerBlock!.children as BlockEntity[], "words");
+    } else if (type.startsWith(":wordcountchar_")) {
+      totalCount = getCount(headerBlock!.children as BlockEntity[], "chars");
+    } else {
+      logseq.UI.showMsg(
+        "Please do not change the render parameters except for your writing target.",
+        "error"
+      );
+    }
 
-      if (
-        !type.startsWith(":wordcountchar_") &&
-        !type.startsWith(":wordcount_")
-      ) {
-        return;
-      } else if (type.startsWith(":wordcount_")) {
-        // Begin recursion
-        const getCount = async (childrenArr: BlockEntity[]) => {
-          for (let a = 0; a < childrenArr.length; a++) {
-            if (logseq.settings!.forceWordCount) {
-              totalCount += simpleWordsFunction(childrenArr[a].content);
-            } else {
-              totalCount += mixedWordsFunction(childrenArr[a].content);
-            }
-
-            if (childrenArr[a].children) {
-              getCount(childrenArr[a].children as BlockEntity[]);
-            } else {
-              return totalCount;
-            }
-          }
-        };
-
-        await getCount(headerBlock!.children as BlockEntity[]);
-
-        if (target === undefined) {
-          logseq.provideUI({
-            key: `${wordcountId}`,
-            slot,
-            reset: true,
-            template: `
-          <button class="wordcount-btn" data-slot-id="${slot}" data-wordcount-id="${wordcountId}">${
-              logseq.settings!.wordCountStr
-            } ${totalCount}</button>
-         `,
-          });
-        } else {
-          const percentage = ((totalCount / parseInt(target)) * 100).toFixed(1);
-          logseq.provideUI({
-            key: `${wordcountId}`,
-            slot,
-            reset: true,
-            template: `
-          <button class="wordcount-btn" data-slot-id="${slot}" data-wordcount-id="${wordcountId}">Writing Target: ${percentage}% (${totalCount}/${target})</button>
-         `,
-          });
-        }
-      } else if (type.startsWith(":wordcountchar_")) {
-        // Begin recursion
-        const getCount = async (childrenArr: any[]) => {
-          for (let a = 0; a < childrenArr.length; a++) {
-            totalCount += childrenArr[a].content.length;
-
-            if (childrenArr[a].children) {
-              getCount(childrenArr[a].children);
-            } else {
-              return totalCount;
-            }
-          }
-        };
-
-        headerBlock!.children ? await getCount(headerBlock!.children) : "";
-
-        if (target === undefined) {
-          logseq.provideUI({
-            key: `${wordcountId}`,
-            slot,
-            reset: true,
-            template: `
-          <button class="wordcount-btn" data-slot-id="${slot}" data-wordcount-id="${wordcountId}">${
-              logseq.settings!.characterCountStr
-            } ${totalCount}</button>
-         `,
-          });
-        } else {
-          const percentage = ((totalCount / parseInt(target)) * 100).toFixed(1);
-          logseq.provideUI({
-            key: `${wordcountId}`,
-            slot,
-            reset: true,
-            template: `
-          <button class="wordcount-btn" data-slot-id="${slot}" data-wordcount-id="${wordcountId}">Tweet target: ${percentage}% (${totalCount}/${target})</button>
-         `,
-          });
-        }
-      }
-    };
-
-    await returnNumberOfWords(type);
+    renderCount(slot, wordcountId, type, target, totalCount);
   });
 };
 
-logseq.ready(main).catch(console.error);
+logseq.useSettingsSchema(settings).ready(main).catch(console.error);

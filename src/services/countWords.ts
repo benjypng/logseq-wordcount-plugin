@@ -1,7 +1,7 @@
 // Credit to https://stackoverflow.com/users/11854986/ken-lee for the below function
 export function mixedWordsFunction(str: string) {
   /// fix problem in special characters such as middle-dot, etc.
-  str = str.replace(/[\u007F-\u00FE.,\/#!$%\^&\*;:{}=\-_`~()>\\]/g, " ");
+  str = str.replace(/[\u007F-\u00FE.,\/#!$%\^&*;:{}=\_`~()>\\]/g, " ");
 
   /// make a duplicate first...
   let str1 = str;
@@ -13,7 +13,7 @@ export function mixedWordsFunction(str: string) {
   /// the following remove all english characters and then count the number of chinese characters in the string
   str2 = str2.replace(/[!-~\d\s]+/gi, "");
 
-  const matches1 = str1.match(/[\u00ff-\uffff]|\S+/g);
+  const matches1 = str1.match(/[\u00ff-\uffff]|\S+/g)?.filter((i) => i !== "-");
   const matches2 = str2.match(/[\u00ff-\uffff]|\S+/g);
 
   const count1 = matches1 ? matches1.length : 0;

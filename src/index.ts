@@ -3,6 +3,7 @@ import { BlockEntity } from "@logseq/libs/dist/LSPlugin.user";
 import getCount from "./services/getCount";
 import renderCount from "./services/renderCount";
 import { settings } from "./services/settings";
+import { mixedWordsFunction, simpleWordsFunction } from "./services/countWords";
 
 const main = async () => {
   console.log("Wordcount plugin loaded");
@@ -49,19 +50,24 @@ const main = async () => {
       includeChildren: true,
     });
 
-    let totalCount: number = 0;
     if (type.startsWith(":wordcount_")) {
-      totalCount = getCount(headerBlock!.children as BlockEntity[], "words");
+      let totalCount = getCount(
+        headerBlock!.children as BlockEntity[],
+        "words"
+      );
+      renderCount(slot, wordcountId, type, target, totalCount);
     } else if (type.startsWith(":wordcountchar_")) {
-      totalCount = getCount(headerBlock!.children as BlockEntity[], "chars");
+      let totalCount = getCount(
+        headerBlock!.children as BlockEntity[],
+        "chars"
+      );
+      renderCount(slot, wordcountId, type, target, totalCount);
     } else {
       logseq.UI.showMsg(
         "Please do not change the render parameters except for your writing target.",
         "error"
       );
     }
-
-    renderCount(slot, wordcountId, type, target, totalCount);
   });
 
   // Calculate number of words on page
@@ -69,11 +75,10 @@ const main = async () => {
     const [type, count] = payload.arguments;
     if (!type.startsWith(":wordcount-page_")) return;
 
-    let totalCount = 0;
     logseq.DB.onChanged(async function ({ blocks }) {
       if (blocks.length === 2) {
         const pbt = await logseq.Editor.getPageBlocksTree(blocks[1].name);
-        totalCount = getCount(pbt, "words");
+        let totalCount = getCount(pbt, "words");
         await logseq.Editor.updateBlock(
           payload.uuid,
           `{{renderer :wordcount-page_, ${totalCount - 3}}}`

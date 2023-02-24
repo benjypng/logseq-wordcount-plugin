@@ -6,28 +6,35 @@ export default function getCount(
   countWhat: string
 ) {
   let totalCount = 0;
-
   if (countWhat === "words") {
-    for (let a = 0; a < childrenArr.length; a++) {
-      if (logseq.settings!.forceWordCount) {
-        totalCount += simpleWordsFunction(childrenArr[a].content);
-      } else {
-        totalCount += mixedWordsFunction(childrenArr[a].content);
-      }
-
-      if (childrenArr[a].children) {
-        getCount(childrenArr[a].children as BlockEntity[], "words");
+    function recurse(childrenArr: BlockEntity[]) {
+      for (let a = 0; a < childrenArr.length; a++) {
+        if (logseq.settings!.forceWordCount) {
+          totalCount += simpleWordsFunction(childrenArr[a].content);
+        } else {
+          totalCount += mixedWordsFunction(childrenArr[a].content);
+        }
+        if (childrenArr[a].children) {
+          recurse(childrenArr[a].children as BlockEntity[]);
+        }
       }
     }
+
+    recurse(childrenArr);
+    return totalCount;
   } else if (countWhat === "chars") {
-    for (let a = 0; a < childrenArr.length; a++) {
-      totalCount += childrenArr[a].content.length;
+    function recurse(childrenArr: BlockEntity[]) {
+      for (let a = 0; a < childrenArr.length; a++) {
+        totalCount += childrenArr[a].content.length;
 
-      if (childrenArr[a].children) {
-        getCount(childrenArr[a].children as BlockEntity[], "chars");
+        if (childrenArr[a].children) {
+          recurse(childrenArr[a].children as BlockEntity[]);
+        }
       }
     }
+    recurse(childrenArr);
+    return totalCount;
+  } else {
+    return 0;
   }
-
-  return totalCount;
 }

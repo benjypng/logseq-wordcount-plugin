@@ -14,7 +14,7 @@ export default function renderCount(
       } else if (type.startsWith(":wordcountchar_")) {
         return `${characterCountStr} ${totalCount}`;
       } else if (type.startsWith(":wordcount-page_")) {
-        return `${wordCountStr} ${totalCount}`;
+        return `${wordCountStr} ${!totalCount ? 0 : totalCount}`;
       }
     } else {
       const percentage = ((totalCount / parseInt(target)) * 100).toFixed(1);

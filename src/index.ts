@@ -33,7 +33,10 @@ const main = async () => {
     await logseq.Editor.insertAtEditingCursor(`{{renderer :wordcountchar_}}`);
   });
 
-  // Insert renderer
+  logseq.Editor.registerSlashCommand("Word count - page", async () => {
+    await logseq.Editor.insertAtEditingCursor(`{{renderer :wordcount-page_}}`);
+  });
+
   logseq.App.onMacroRendererSlotted(async ({ slot, payload }) => {
     const uuid = payload.uuid;
     const [type, target] = payload.arguments;
@@ -59,6 +62,26 @@ const main = async () => {
     }
 
     renderCount(slot, wordcountId, type, target, totalCount);
+  });
+
+  // Calculate number of words on page
+  logseq.App.onMacroRendererSlotted(async ({ slot, payload }) => {
+    const [type, count] = payload.arguments;
+    if (!type.startsWith(":wordcount-page_")) return;
+
+    let totalCount = 0;
+    logseq.DB.onChanged(async function ({ blocks }) {
+      if (blocks.length === 2) {
+        const pbt = await logseq.Editor.getPageBlocksTree(blocks[1].name);
+        totalCount = getCount(pbt, "words");
+        await logseq.Editor.updateBlock(
+          payload.uuid,
+          `{{renderer :wordcount-page_, ${totalCount - 3}}}`
+        );
+      }
+    });
+
+    renderCount(slot, slot, type, undefined, parseInt(count));
   });
 };
 

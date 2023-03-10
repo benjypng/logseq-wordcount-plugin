@@ -76,7 +76,12 @@ const main = async () => {
     if (!type.startsWith(":wordcount-page_")) return;
 
     logseq.DB.onChanged(async function ({ blocks }) {
-      if (blocks.length === 2) {
+      const blk = await logseq.Editor.getBlock(payload.uuid);
+
+      if (
+        blocks.length === 2 &&
+        blk!.content.startsWith(`{{renderer ${type}}`)
+      ) {
         const pbt = await logseq.Editor.getPageBlocksTree(blocks[1].name);
         let totalCount = getCount(pbt, "words");
         await logseq.Editor.updateBlock(

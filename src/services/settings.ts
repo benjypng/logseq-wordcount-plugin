@@ -16,6 +16,20 @@ export const settings: SettingSchemaDesc[] = [
     title: "Customise character count text",
   },
   {
+    key: "wordTargetStr",
+    type: "string",
+    default: "Writing target:",
+    description: "Customise the text that is shown in the writing target.",
+    title: "Customise writing target text",
+  },
+  {
+    key: "characterTargetStr",
+    type: "string",
+    default: "Character target:",
+    description: "Customise the text that is shown in the character-counter.",
+    title: "Customise character target text",
+  },
+  {
     key: "forceWordCount",
     type: "boolean",
     default: false,

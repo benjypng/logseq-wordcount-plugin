@@ -6,7 +6,12 @@ export default function renderCount(
   totalCount: number
 ) {
   function button() {
-    const { wordCountStr, characterCountStr } = logseq.settings!;
+    const {
+        wordCountStr,
+        characterCountStr,
+        wordTargetStr,
+        characterTargetStr
+     } = logseq.settings!;
 
     if (target === undefined) {
       if (type.startsWith(":wordcount_")) {
@@ -20,9 +25,9 @@ export default function renderCount(
       const percentage = ((totalCount / parseInt(target)) * 100).toFixed(1);
 
       if (type.startsWith(":wordcount_")) {
-        return `Writing Target: ${percentage}% (${totalCount}/${target})`;
+        return `${wordTargetStr} ${percentage}% (${totalCount}/${target})`;
       } else if (type.startsWith(":wordcountchar_")) {
-        return `Character target: ${percentage}% (${totalCount}/${target})`;
+        return `${characterTargetStr} ${percentage}% (${totalCount}/${target})`;
       }
     }
   }

@@ -105,11 +105,16 @@ const main = async () => {
       if (blk) {
         const page = await logseq.Editor.getPage(blk.page.id);
         const pbt = await logseq.Editor.getPageBlocksTree(page!.name);
-        if (pbt[0].content.startsWith("{{renderer :wordcount-page_,")) {
-          await logseq.Editor.updateBlock(
-            pbt[0].uuid,
-            `{{renderer :wordcount-page_, ${count - 3}}}`
+        if (pbt[0].content.includes("{{renderer :wordcount-page_,")) {
+          let content = pbt[0].content;
+          const regexp = /\{\{renderer :wordcount-page_,(.*?)\}\}/;
+          const matched = regexp.exec(content);
+          content = content.replace(
+            matched[0],
+            `{{renderer :wordcount-page_, ${count}}}`
           );
+
+          await logseq.Editor.updateBlock(pbt[0].uuid, content);
         }
       }
     }

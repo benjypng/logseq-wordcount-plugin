@@ -23,4 +23,11 @@ export const settings: SettingSchemaDesc[] = [
       "Forces counting cyrillic characters in words instead of individual characters (.e.g for Russian language to be counted correctly)a,",
     title: "Force Word Count (for Cyrillic characters)",
   },
+  {
+    key: "toolbar",
+    type: "boolean",
+    default: false,
+    description: "Displays number of words in toolbar.",
+    title: "Toolbar Wordcount",
+  },
 ];

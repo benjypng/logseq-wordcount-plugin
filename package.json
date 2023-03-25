@@ -1,13 +1,13 @@
 {
   "name": "logseq-wordcount-plugin",
-  "version": "2.4.3",
+  "version": "2.4.4",
   "description": "Simple word and character counter that calculates the number of words across all nested blocks!",
   "main": "dist/index.html",
   "targets": {
     "main": false
   },
   "scripts": {
-    "build": "rm -R dist && echo 'dist folder removed'; parcel build --no-source-maps src/index.html --public-url ./"
+    "build": "rm -R dist && echo 'dist folder removed'; parcel build src/index.html --public-url ./"
   },
   "keywords": [],
   "author": "hkgnp",

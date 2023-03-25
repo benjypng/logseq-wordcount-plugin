@@ -34,10 +34,6 @@ const main = async () => {
     await logseq.Editor.insertAtEditingCursor(`{{renderer :wordcountchar_}}`);
   });
 
-  logseq.Editor.registerSlashCommand("Word count - page", async () => {
-    await logseq.Editor.insertAtEditingCursor(`{{renderer :wordcount-page_}}`);
-  });
-
   logseq.App.onMacroRendererSlotted(async ({ slot, payload }) => {
     const uuid = payload.uuid;
     const [type, target] = payload.arguments;
@@ -70,28 +66,60 @@ const main = async () => {
     }
   });
 
-  // Calculate number of words on page
   logseq.App.onMacroRendererSlotted(async ({ slot, payload }) => {
     const [type, count] = payload.arguments;
     if (!type.startsWith(":wordcount-page_")) return;
+    const wordcountId = `wordcount-page_${type.split("_")[1]?.trim()}_${slot}`;
 
-    logseq.DB.onChanged(async function ({ blocks }) {
-      const blk = await logseq.Editor.getBlock(payload.uuid);
-
-      if (
-        blocks.length === 2 &&
-        blk!.content.startsWith(`{{renderer ${type}}`)
-      ) {
-        const pbt = await logseq.Editor.getPageBlocksTree(blocks[1].name);
-        let totalCount = getCount(pbt, "words");
-        await logseq.Editor.updateBlock(
-          payload.uuid,
-          `{{renderer :wordcount-page_, ${totalCount - 3}}}`
-        );
-      }
+    logseq.provideUI({
+      key: wordcountId,
+      slot,
+      reset: true,
+      template: `
+          <button class="wordcount-btn" data-slot-id="${wordcountId}" data-wordcount-id="${wordcountId}">Wordcount: ${count}</button>`,
     });
+  });
 
-    renderCount(slot, slot, type, undefined, parseInt(count));
+  logseq.Editor.registerSlashCommand("Word count - page", async () => {
+    await logseq.Editor.insertAtEditingCursor(
+      `{{renderer :wordcount-page_, 0}}`
+    );
+  });
+
+  logseq.provideStyle(`
+											.wordcount {
+												font-family: "Courier New", monospace;
+												font-size: 13px;
+												padding: 0 5px;
+												border: 1px solid;
+												border-radius: 8px;
+											}
+											`);
+
+  let count = 0;
+  logseq.DB.onChanged(async function ({ blocks }) {
+    if (blocks.length === 1) {
+      const content = blocks[0].content;
+      count = mixedWordsFunction(content);
+      const blk = await logseq.Editor.getCurrentBlock();
+      if (blk) {
+        const page = await logseq.Editor.getPage(blk.page.id);
+        const pbt = await logseq.Editor.getPageBlocksTree(page!.name);
+        if (pbt[0].content.startsWith("{{renderer :wordcount-page_,")) {
+          await logseq.Editor.updateBlock(
+            pbt[0].uuid,
+            `{{renderer :wordcount-page_, ${count - 3}}}`
+          );
+        }
+      }
+    }
+
+    if (logseq.settings!.toolbar) {
+      logseq.App.registerUIItem("toolbar", {
+        key: "wordcount-page",
+        template: `<p class="wordcount">${count} words</p>`,
+      });
+    }
   });
 };
 

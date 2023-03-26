@@ -3,24 +3,13 @@ import { BlockEntity } from "@logseq/libs/dist/LSPlugin.user";
 import getCount from "./services/getCount";
 import renderCount from "./services/renderCount";
 import { settings } from "./services/settings";
-import { mixedWordsFunction, simpleWordsFunction } from "./services/countWords";
+import { mixedWordsFunction } from "./services/countWords";
+import { provideStyles } from "./styles";
 
 const main = async () => {
   console.log("Wordcount plugin loaded");
 
-  // Style for word counter
-  logseq.provideStyle(`
-    .wordcount-btn {
-       border: 1px solid var(--ls-border-color);
-       white-space: initial;
-       padding: 2px 4px;
-       border-radius: 4px;
-       user-select: none;
-       cursor: default;
-       display: flex;
-       align-content: center;
-    }
-    `);
+  provideStyles();
 
   logseq.Editor.registerSlashCommand("Word count", async () => {
     await logseq.Editor.insertAtEditingCursor(`{{renderer :wordcount_}}`);
@@ -86,16 +75,6 @@ const main = async () => {
     );
   });
 
-  logseq.provideStyle(`
-											.wordcount {
-												font-family: "Courier New", monospace;
-												font-size: 13px;
-												padding: 0 5px;
-												border: 1px solid;
-												border-radius: 8px;
-											}
-											`);
-
   let count = 0;
   logseq.DB.onChanged(async function ({ blocks }) {
     if (blocks.length === 1) {
@@ -110,7 +89,7 @@ const main = async () => {
           const regexp = /\{\{renderer :wordcount-page_,(.*?)\}\}/;
           const matched = regexp.exec(content);
           content = content.replace(
-            matched[0],
+            matched![0],
             `{{renderer :wordcount-page_, ${count}}}`
           );
 
@@ -122,7 +101,7 @@ const main = async () => {
     if (logseq.settings!.toolbar) {
       logseq.App.registerUIItem("toolbar", {
         key: "wordcount-page",
-        template: `<p class="wordcount">${count} words</p>`,
+        template: `<p class="wordcount-toolbar">${count} words</p>`,
       });
     }
   });

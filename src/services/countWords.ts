@@ -1,7 +1,7 @@
 // Credit to https://stackoverflow.com/users/11854986/ken-lee for the below function
 export function mixedWordsFunction(str: string) {
   /// fix problem in special characters such as middle-dot, etc.
-  if (str.length > 0) {
+  if (str && str.length > 0) {
     str = str.replace(/[\u007F-\u00FE.,\/#!$%\^&*;:{}=\_`~()>\\]/g, " ");
 
     /// make a duplicate first...

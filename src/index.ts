@@ -65,7 +65,7 @@ const main = async () => {
       slot,
       reset: true,
       template: `
-          <button class="wordcount-btn" data-slot-id="${wordcountId}" data-wordcount-id="${wordcountId}">Wordcount: ${count}</button>`,
+          <span class="wordcount-btn" data-slot-id="${wordcountId}" data-wordcount-id="${wordcountId}">Wordcount: ${count}</span>`,
     });
   });
 

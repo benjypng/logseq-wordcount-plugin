@@ -7,11 +7,11 @@ export default function renderCount(
 ) {
   function button() {
     const {
-        wordCountStr,
-        characterCountStr,
-        wordTargetStr,
-        characterTargetStr
-     } = logseq.settings!;
+      wordCountStr,
+      characterCountStr,
+      wordTargetStr,
+      characterTargetStr,
+    } = logseq.settings!;
 
     if (target === undefined) {
       if (type.startsWith(":wordcount_")) {
@@ -37,6 +37,6 @@ export default function renderCount(
     slot,
     reset: true,
     template: `
-          <button class="wordcount-btn" data-slot-id="${id}" data-wordcount-id="${id}">${button()}</button>`,
+          <span class="wordcount-btn" data-slot-id="${id}" data-wordcount-id="${id}">${button()}</span>`,
   });
 }

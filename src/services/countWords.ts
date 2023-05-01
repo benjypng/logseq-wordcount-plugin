@@ -1,6 +1,6 @@
 // Credit to https://stackoverflow.com/users/11854986/ken-lee for the below function
 export function mixedWordsFunction(str: string): number {
-  if (str.length === 0) return 0;
+  if (!str || str.length === 0) return 0;
 
   /// fix problem in special characters such as middle-dot, etc.
   str = str.replace(/[\u007F-\u00FE.,\/#!$%\^&*;:{}=\_`~()>\\]/g, " ");

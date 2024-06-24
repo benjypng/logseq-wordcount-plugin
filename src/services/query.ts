@@ -1,9 +1,12 @@
 import { BlockEntity } from "@logseq/libs/dist/LSPlugin.user";
 import { typeFlag } from "type-flag";
 
+type Filter = ((block: BlockEntity) => boolean);
+
 export interface Options {
   countingType: "words" | "characters";
   target?: number;
+  filters: Filter[];
 }
 
 const optionsSchemas = {
@@ -16,8 +19,10 @@ export function parseQuery(query: string): Options {
   if (Object.entries(parsing.unknownFlags).length > 0) {
     throw new Error("invalid word counting query arguments")
   }
+  const filters: Filter[] = [];
   return {
     countingType: parsing.flags.characters ? "characters" : "words",
     target: parsing.flags.target,
+    filters
   };
 }

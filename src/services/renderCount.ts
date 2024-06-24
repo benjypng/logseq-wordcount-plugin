@@ -1,9 +1,9 @@
+import { CountResult } from "./getCount.ts";
+
 export default function renderCount(
   slot: string,
   id: string,
-  type: string,
-  target: string | undefined,
-  totalCount: number
+  { count, options }: CountResult
 ) {
   function button() {
     const {
@@ -13,21 +13,20 @@ export default function renderCount(
       characterTargetStr,
     } = logseq.settings!;
 
-    if (target === undefined) {
-      if (type.startsWith(":wordcount_")) {
-        return `${wordCountStr} ${totalCount}`;
-      } else if (type.startsWith(":wordcountchar_")) {
-        return `${characterCountStr} ${totalCount}`;
-      } else if (type.startsWith(":wordcount-page_")) {
-        return `${wordCountStr} ${!totalCount ? 0 : totalCount}`;
+    if (!options.target) {
+      switch (options.countingType) {
+        case "words":
+          return `${wordCountStr} ${count}`;
+        case "characters":
+          return `${characterCountStr} ${count}`;
       }
     } else {
-      const percentage = ((totalCount / parseInt(target)) * 100).toFixed(1);
-
-      if (type.startsWith(":wordcount_")) {
-        return `${wordTargetStr} ${percentage}% (${totalCount}/${target})`;
-      } else if (type.startsWith(":wordcountchar_")) {
-        return `${characterTargetStr} ${percentage}% (${totalCount}/${target})`;
+      const percentage = ((count / options.target) * 100).toFixed(1);
+      switch (options.countingType) {
+        case "words":
+          return `${wordTargetStr} ${percentage}% (${count}/${options.target})`;
+        case "characters":
+          return `${characterTargetStr} ${percentage}% (${count}/${options.target})`;
       }
     }
   }

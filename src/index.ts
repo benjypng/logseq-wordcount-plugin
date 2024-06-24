@@ -16,17 +16,17 @@ const main = async () => {
   });
 
   logseq.Editor.registerSlashCommand("Writing session target", async () => {
-    await logseq.Editor.insertAtEditingCursor(`{{renderer :wordcount_, 500}}`);
+    await logseq.Editor.insertAtEditingCursor(`{{renderer :wordcount_, --target 500}}`);
   });
 
   logseq.Editor.registerSlashCommand("Character count", async () => {
-    await logseq.Editor.insertAtEditingCursor(`{{renderer :wordcountchar_}}`);
+    await logseq.Editor.insertAtEditingCursor(`{{renderer :wordcount_, --characters}}`);
   });
 
   logseq.App.onMacroRendererSlotted(async ({ slot, payload }) => {
     const uuid = payload.uuid;
-    const [type, target] = payload.arguments;
-    if (!type.startsWith(":wordcountchar_") && !type.startsWith(":wordcount_"))
+    const [type, query] = payload.arguments;
+    if (!type.startsWith(":wordcount_"))
       return;
 
     const wordcountId = `wordcount_${type.split("_")[1]?.trim()}_${slot}`;
@@ -35,19 +35,14 @@ const main = async () => {
       includeChildren: true,
     });
 
-    if (type.startsWith(":wordcount_")) {
-      let totalCount = getCount(
+    try {
+      let countResult = getCount(
         headerBlock!.children as BlockEntity[],
-        "words"
+        query
       );
-      renderCount(slot, wordcountId, type, target, totalCount);
-    } else if (type.startsWith(":wordcountchar_")) {
-      let totalCount = getCount(
-        headerBlock!.children as BlockEntity[],
-        "chars"
-      );
-      renderCount(slot, wordcountId, type, target, totalCount);
-    } else {
+      renderCount(slot, wordcountId, countResult);
+    } catch (error) {
+      console.error(error);
       logseq.UI.showMsg(
         "Please do not change the render parameters except for your writing target.",
         "error"

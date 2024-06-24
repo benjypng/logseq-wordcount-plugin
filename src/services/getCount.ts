@@ -1,42 +1,37 @@
-import { BlockEntity } from "@logseq/libs/dist/LSPlugin.user";
+import { BlockEntity } from "@logseq/libs/dist/LSPlugin";
+import { Options, parseQuery } from "./query.ts";
 import { mixedWordsFunction, simpleWordsFunction } from "./countWords";
-import { removeFormat } from "./format";
+import { removeFormat } from "./format.ts";
+
+export interface CountResult { count: number; options: Options; }
 
 export default function getCount(
   childrenArr: BlockEntity[],
-  countWhat: string
-) {
+  query: string = "",
+): CountResult {
+  const options = parseQuery(query);
+
   let totalCount = 0;
-  if (countWhat === "words") {
-    function recurse(childrenArr: BlockEntity[]) {
-      for (let a = 0; a < childrenArr.length; a++) {
-        const content = removeFormat(childrenArr[a].content);
-        if (logseq.settings!.forceWordCount) {
-          totalCount += simpleWordsFunction(content);
+
+  function recurse(childrenArr: BlockEntity[]) {
+    for (const child of childrenArr) {
+      if (options.filters.every(filter => filter(child))) {
+        const content = removeFormat(child.content)
+        if (options.countingType == "words") {
+          if (logseq.settings!.forceWordCount) {
+            totalCount += simpleWordsFunction(content);
+          } else {
+            totalCount += mixedWordsFunction(content);
+          }
         } else {
-          totalCount += mixedWordsFunction(content);
-        }
-        if (childrenArr[a].children) {
-          recurse(childrenArr[a].children as BlockEntity[]);
+          totalCount += content.length;
         }
       }
-    }
-
-    recurse(childrenArr);
-    return totalCount;
-  } else if (countWhat === "chars") {
-    function recurse(childrenArr: BlockEntity[]) {
-      for (let a = 0; a < childrenArr.length; a++) {
-        totalCount += removeFormat(childrenArr[a].content).length;
-
-        if (childrenArr[a].children) {
-          recurse(childrenArr[a].children as BlockEntity[]);
-        }
+      if (child.children) {
+        recurse(child.children as BlockEntity[]);
       }
     }
-    recurse(childrenArr);
-    return totalCount;
-  } else {
-    return 0;
   }
+  recurse(childrenArr);
+  return { count: totalCount, options };
 }

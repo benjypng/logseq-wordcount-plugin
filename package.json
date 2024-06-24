@@ -14,7 +14,6 @@
   "license": "MIT",
   "dependencies": {
     "@logseq/libs": "^0.0.14",
-    "rxjs": "^7.8.0",
     "words-count": "^2.0.2"
   },
   "logseq": {

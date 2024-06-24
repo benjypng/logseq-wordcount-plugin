@@ -38,4 +38,11 @@ export default function renderCount(
     template: `
           <span class="wordcount-btn" data-slot-id="${id}" data-wordcount-id="${id}">${button()}</span>`,
   });
+
+  if (options.countingContext == "page" && logseq.settings!.toolbar) {
+    logseq.App.registerUIItem("toolbar", {
+      key: "wordcount-page",
+      template: `<p class="wordcount-toolbar">${button()}</p>`,
+    });
+  }
 }

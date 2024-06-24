@@ -1,5 +1,6 @@
 import { BlockEntity } from "@logseq/libs/dist/LSPlugin.user";
 import { typeFlag } from "type-flag";
+import highlight from "./filters/highlighted.ts";
 
 type Filter = ((block: BlockEntity) => boolean);
 
@@ -12,6 +13,7 @@ export interface Options {
 const optionsSchemas = {
   characters: Boolean,
   target: Number,
+  "filter-highlight": Boolean,
 };
 
 export function parseQuery(query: string): Options {
@@ -20,6 +22,9 @@ export function parseQuery(query: string): Options {
     throw new Error("invalid word counting query arguments")
   }
   const filters: Filter[] = [];
+  if (parsing.flags["filter-highlight"]) {
+    filters.push(highlight);
+  }
   return {
     countingType: parsing.flags.characters ? "characters" : "words",
     target: parsing.flags.target,

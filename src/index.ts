@@ -5,6 +5,7 @@ import renderCount from "./services/renderCount";
 import { settings } from "./services/settings";
 import { mixedWordsFunction } from "./services/countWords";
 import { provideStyles } from "./styles";
+import { v4 as uuidv4 } from "uuid";
 
 const main = async () => {
   console.log("Wordcount plugin loaded");
@@ -12,7 +13,9 @@ const main = async () => {
   provideStyles();
 
   logseq.Editor.registerSlashCommand("Word count", async () => {
-    await logseq.Editor.insertAtEditingCursor(`{{renderer :wordcount_}}`);
+    await logseq.Editor.insertAtEditingCursor(
+      `{{renderer :wordcount_${uuidv4()}}}`
+    );
   });
 
   logseq.Editor.registerSlashCommand("Writing session target", async () => {

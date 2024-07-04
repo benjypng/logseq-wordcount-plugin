@@ -1,35 +1,60 @@
 {
   "name": "logseq-wordcount-plugin",
-  "version": "2.4.14",
+  "author": "benjypng",
   "description": "Simple word and character counter that calculates the number of words across all nested blocks!",
-  "main": "dist/index.html",
-  "targets": {
-    "main": false
+  "license": "MIT",
+  "logseq": {
+    "id": "logseq-wordcount-plugin",
+    "title": "logseq-wordcount-plugin",
+    "icon": "./icon.png",
+    "main": "dist/index.html"
   },
   "scripts": {
-    "build": "rm -R dist && echo 'dist folder removed'; parcel build src/index.html --public-url ./"
+    "dev": "npx vite",
+    "build": "npx tsc && npx vite build",
+    "preview": "npx vite preview",
+    "build:css": "npx tailwindcss -i ./src/tailwind.css -o ./src/output.css",
+    "lint": "npx eslint . --fix"
   },
-  "keywords": [],
-  "author": "hkgnp",
-  "license": "MIT",
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "plugins": [
+      [
+        "@semantic-release/github",
+        {
+          "assets": [
+            "logseq-datenlp-plugin.zip"
+          ]
+        }
+      ]
+    ]
+  },
   "dependencies": {
     "@logseq/libs": "^0.0.15",
     "rxjs": "^7.8.1",
     "uuid": "^9.0.1",
     "words-count": "^2.0.2"
   },
-  "logseq": {
-    "id": "logseq-wordcount-plugin",
-    "title": "logseq-wordcount-plugin",
-    "icon": "./icon.png"
-  },
   "devDependencies": {
     "@eslint/js": "^9.6.0",
+    "@types/eslint": "^8.56.10",
     "@types/eslint-config-prettier": "^6.11.3",
     "@types/eslint__js": "^8.42.3",
+    "@types/node": "^20.14.9",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/uuid": "^10.0.0",
+    "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-simple-import-sort": "^12.1.0",
-    "parcel": "^2.12.0",
-    "typescript-eslint": "^7.14.1"
+    "prettier": "^3.3.2",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.5.2",
+    "typescript-eslint": "^7.14.1",
+    "vite": "^4.5.3",
+    "vite-plugin-logseq": "^1.1.2",
+    "vite-tsconfig-paths": "^4.3.2"
   }
 }

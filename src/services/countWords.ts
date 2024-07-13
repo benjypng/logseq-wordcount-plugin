@@ -10,7 +10,7 @@ export const mixedWordsFunction = (str: string): number => {
 export const simpleWordsFunction = (str: string): number => {
   if (!str || str.length === 0) return 0
   str = str.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-  str = str.replace(/[^а-яА-ЯёЁ\s]/g, ' ')
-  const matches = str.match(/[а-яА-ЯёЁ]+/g)
+  str = str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  const matches = str.match(/[а-яА-ЯёЁa-zA-Z]+/g)
   return matches ? matches.length : 0
 }

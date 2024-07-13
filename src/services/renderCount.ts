@@ -3,7 +3,7 @@ export default function renderCount(
   id: string,
   type: string,
   target: string | undefined,
-  totalCount: number
+  totalCount: number,
 ) {
   function button() {
     const {
@@ -11,23 +11,23 @@ export default function renderCount(
       characterCountStr,
       wordTargetStr,
       characterTargetStr,
-    } = logseq.settings!;
+    } = logseq.settings!
 
     if (target === undefined) {
-      if (type.startsWith(":wordcount_")) {
-        return `${wordCountStr} ${totalCount}`;
-      } else if (type.startsWith(":wordcountchar_")) {
-        return `${characterCountStr} ${totalCount}`;
-      } else if (type.startsWith(":wordcount-page_")) {
-        return `${wordCountStr} ${!totalCount ? 0 : totalCount}`;
+      if (type.startsWith(':wordcount_')) {
+        return `${wordCountStr} ${totalCount}`
+      } else if (type.startsWith(':wordcountchar_')) {
+        return `${characterCountStr} ${totalCount}`
+      } else if (type.startsWith(':wordcount-page_')) {
+        return `${wordCountStr} ${!totalCount ? 0 : totalCount}`
       }
     } else {
-      const percentage = ((totalCount / parseInt(target)) * 100).toFixed(1);
+      const percentage = ((totalCount / parseInt(target)) * 100).toFixed(1)
 
-      if (type.startsWith(":wordcount_")) {
-        return `${wordTargetStr} ${percentage}% (${totalCount}/${target})`;
-      } else if (type.startsWith(":wordcountchar_")) {
-        return `${characterTargetStr} ${percentage}% (${totalCount}/${target})`;
+      if (type.startsWith(':wordcount_')) {
+        return `${wordTargetStr} ${percentage}% (${totalCount}/${target})`
+      } else if (type.startsWith(':wordcountchar_')) {
+        return `${characterTargetStr} ${percentage}% (${totalCount}/${target})`
       }
     }
   }
@@ -37,6 +37,6 @@ export default function renderCount(
     slot,
     reset: true,
     template: `
-          <span class="wordcount-btn" data-slot-id="${id}" data-wordcount-id="${id}">${button()}</span>`,
-  });
+          <span id="${id}" class="wordcount-btn">${button()}</span>`,
+  })
 }

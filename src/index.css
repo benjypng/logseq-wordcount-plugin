@@ -1,0 +1,16 @@
+.wordcount-toolbar {
+  font-size: 0.75rem;
+}
+
+.wordcount-btn {
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.375rem;
+  padding: 0.375rem 1rem;
+  cursor: pointer;
+}
+
+.wordcount-btn:hover {
+  background-color: #e8e8e8;
+}

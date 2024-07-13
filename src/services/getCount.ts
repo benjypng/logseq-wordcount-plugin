@@ -1,40 +1,39 @@
-import { BlockEntity } from "@logseq/libs/dist/LSPlugin.user";
-import { mixedWordsFunction, simpleWordsFunction } from "./countWords";
+import { BlockEntity } from '@logseq/libs/dist/LSPlugin.user'
+
+import { mixedWordsFunction, simpleWordsFunction } from './countWords'
 
 export default function getCount(
   childrenArr: BlockEntity[],
-  countWhat: string
+  countWhat: string,
 ) {
-  let totalCount = 0;
-  if (countWhat === "words") {
+  let totalCount = 0
+  if (countWhat === 'words') {
     function recurse(childrenArr: BlockEntity[]) {
-      for (let a = 0; a < childrenArr.length; a++) {
+      for (const child of childrenArr) {
         if (logseq.settings!.forceWordCount) {
-          totalCount += simpleWordsFunction(childrenArr[a].content);
+          totalCount += simpleWordsFunction(child.content)
         } else {
-          totalCount += mixedWordsFunction(childrenArr[a].content);
+          totalCount += mixedWordsFunction(child.content)
         }
-        if (childrenArr[a].children) {
-          recurse(childrenArr[a].children as BlockEntity[]);
+        if (child.children) {
+          recurse(child.children as BlockEntity[])
         }
       }
     }
-
-    recurse(childrenArr);
-    return totalCount;
-  } else if (countWhat === "chars") {
+    recurse(childrenArr)
+    return totalCount
+  } else if (countWhat === 'chars') {
     function recurse(childrenArr: BlockEntity[]) {
-      for (let a = 0; a < childrenArr.length; a++) {
-        totalCount += childrenArr[a].content.length;
-
-        if (childrenArr[a].children) {
-          recurse(childrenArr[a].children as BlockEntity[]);
+      for (const child of childrenArr) {
+        totalCount += child.content.length
+        if (child.children) {
+          recurse(child.children as BlockEntity[])
         }
       }
     }
-    recurse(childrenArr);
-    return totalCount;
+    recurse(childrenArr)
+    return totalCount
   } else {
-    return 0;
+    return 0
   }
 }

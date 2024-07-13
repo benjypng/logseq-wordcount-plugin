@@ -42,6 +42,13 @@ export const settings: SettingSchemaDesc[] = [
     type: 'boolean',
     default: false,
     description: 'Displays number of words in toolbar.',
-    title: 'Toolbar Wordcount',
+    title: 'Wordcount Toolbar',
+  },
+  {
+    key: 'countSelected',
+    type: 'boolean',
+    default: false,
+    description: 'Counts number of words highlighted.',
+    title: 'Count Highlighted Text',
   },
 ]

@@ -25,7 +25,7 @@
         "@semantic-release/github",
         {
           "assets": [
-            "logseq-datenlp-plugin.zip"
+            "logseq-wordcount-plugin.zip"
           ]
         }
       ]

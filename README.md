@@ -1,20 +1,29 @@
 [[:gift_heart: Sponsor this project on Github](https://github.com/sponsors/hkgnp) or [:coffee: Get me a coffee](https://www.buymeacoffee.com/hkgnp.dev) if you like this plugin!
 
 # Introduction
-
+### Word count
 ![](screenshots/wordcount.gif)
 
+### Page-level word count
+![](screenshots/wordcount-page.gif)
+
+### Writing target
 ![](screenshots/writing_session.gif)
 
 # Usage
 
-Use `/wordcount`. It will then count the number of words below this parent block. This supports an unlimited number of nested blocks.
+Use `/Word count`. It will then count the number of words below this parent block. This supports an unlimited number of nested blocks.
 
-You can use more than 1 word counter in a single page. Just prefix the blocks you would like to count with another `/wordcount`.
+You can use more than 1 word counter in a single page. Just prefix the blocks you would like to count with another `/Word count`.
 
 It also supports counting sentences that have both English and Chinese/ Japanese words. E.g. `敏捷的棕色狐狸跳过了懒狗 is a funny phrase` returns 16 words.
 
-You can also use `/character count` to count the number of characters (including spaces) instead of words.
+You can also use `/Character count` to count the number of characters (including spaces) instead of words.
+
+Turn on the "Wordcount Toolbar" setting and total word count of the page will be displayed in the toolbar.
+
+![](screenshots/toolbar-setting.png)
+
 
 Happy counting!
 

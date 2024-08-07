@@ -19,13 +19,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
-    "noUncheckedIndexedAccess": true,
-    "baseUrl": "./",
-    "paths": {
-      "~/*": [
-        "src/*"
-      ]
-    }
+    "noUncheckedIndexedAccess": true
   },
   "include": [
     "**/*.ts",

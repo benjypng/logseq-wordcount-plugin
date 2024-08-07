@@ -1,11 +1,15 @@
-import getCount from '../../services/getCount'
+import { getCount } from '../../utils/get-count'
 
-export const handleToolbar = () => {
-  let count = 0
+const renderToolbarUI = (count: number) => {
   logseq.App.registerUIItem('toolbar', {
     key: 'logseq-wordcount-plugin',
     template: `<a class="button wordcount-toolbar">${count} words</a>`,
   })
+}
+
+export const handleToolbar = () => {
+  let count = 0
+  renderToolbarUI(count)
 
   logseq.App.onRouteChanged(
     async ({
@@ -18,10 +22,7 @@ export const handleToolbar = () => {
       const pbt = await logseq.Editor.getPageBlocksTree(name)
       if (!pbt) return
       count = getCount(pbt, 'words')
-      logseq.App.registerUIItem('toolbar', {
-        key: 'logseq-wordcount-plugin',
-        template: `<a class="button wordcount-toolbar">${count} words</a>`,
-      })
+      renderToolbarUI(count)
 
       const page = await logseq.Editor.getPage(name)
       if (!page) return
@@ -29,10 +30,7 @@ export const handleToolbar = () => {
         const pbt = await logseq.Editor.getPageBlocksTree(name)
         if (!pbt) return
         count = getCount(pbt, 'words')
-        logseq.App.registerUIItem('toolbar', {
-          key: 'logseq-wordcount-plugin',
-          template: `<a class="button wordcount-toolbar">${count} words</a>`,
-        })
+        renderToolbarUI(count)
       })
     },
   )

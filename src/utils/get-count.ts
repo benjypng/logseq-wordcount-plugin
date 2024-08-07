@@ -1,14 +1,11 @@
 import { BlockEntity } from '@logseq/libs/dist/LSPlugin.user'
 
-import { mixedWordsFunction, simpleWordsFunction } from './countWords'
+import { mixedWordsFunction, simpleWordsFunction } from './count-words'
 
-export default function getCount(
-  childrenArr: BlockEntity[],
-  countWhat: string,
-) {
+export const getCount = (childrenArr: BlockEntity[], countWhat: string) => {
   let totalCount = 0
   if (countWhat === 'words') {
-    function recurse(childrenArr: BlockEntity[]) {
+    const recurse = (childrenArr: BlockEntity[]) => {
       for (const child of childrenArr) {
         if (logseq.settings!.forceWordCount) {
           totalCount += simpleWordsFunction(child.content)
@@ -23,7 +20,7 @@ export default function getCount(
     recurse(childrenArr)
     return totalCount
   } else if (countWhat === 'chars') {
-    function recurse(childrenArr: BlockEntity[]) {
+    const recurse = (childrenArr: BlockEntity[]) => {
       for (const child of childrenArr) {
         totalCount += child.content.length
         if (child.children) {

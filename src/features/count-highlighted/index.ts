@@ -1,4 +1,4 @@
-import { mixedWordsFunction } from '../../services/countWords'
+import { mixedWordsFunction } from '../../utils/count-words'
 
 export const countHighlighted = () => {
   logseq.Editor.onInputSelectionEnd(({ text, point: { x, y } }) => {

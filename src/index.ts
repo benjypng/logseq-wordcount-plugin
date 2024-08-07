@@ -8,10 +8,10 @@ import { sessionTarget } from './features/session-target'
 import { handleToolbar } from './features/toolbar'
 import { wordCount } from './features/word-count'
 import css from './index.css?raw'
-import getCount from './services/getCount'
-import renderCount from './services/renderCount'
-import { settings } from './services/settings'
+import { settings } from './settings'
+import { getCount } from './utils/get-count'
 import { handlePopup } from './utils/handle-popup'
+import { renderButton } from './utils/render-button'
 
 const main = async () => {
   console.log('logseq-wordcount-plugin loaded')
@@ -22,9 +22,12 @@ const main = async () => {
   logseq.App.onMacroRendererSlotted(
     async ({ slot, payload: { uuid, arguments: args } }) => {
       const [type, target] = args
+
       if (
         !type ||
-        (!type.startsWith(':wordcountchar_') && !type.startsWith(':wordcount_'))
+        (!type.startsWith(':wordcountchar_') &&
+          !type.startsWith(':wordcount_') &&
+          !type.startsWith(':wordcountpomodoro_'))
       )
         return
 
@@ -34,32 +37,36 @@ const main = async () => {
       })
       if (!headerBlock) return
 
-      if (type.startsWith(':wordcount_')) {
-        const totalCount = getCount(
-          headerBlock.children as BlockEntity[],
-          'words',
-        )
-        renderCount(slot, wordcountId, type, target, totalCount)
-      } else if (type.startsWith(':wordcountchar_')) {
-        const totalCount = getCount(
-          headerBlock.children as BlockEntity[],
-          'chars',
-        )
-        renderCount(slot, wordcountId, type, target, totalCount)
+      switch (type) {
+        case `:wordcount_${uuid}`: {
+          const totalCount = getCount(
+            headerBlock.children as BlockEntity[],
+            'words',
+          )
+          renderButton(slot, wordcountId, type, totalCount, target)
+          break
+        }
+        case `:wordcountchar_${uuid}`: {
+          const totalCount = getCount(
+            headerBlock.children as BlockEntity[],
+            'chars',
+          )
+          renderButton(slot, wordcountId, type, totalCount, target)
+          break
+        }
+        default:
+          return
       }
     },
   )
 
+  // Features
   wordCount()
   characterCount()
   sessionTarget()
 
-  if (logseq.settings!.toolbar) {
-    handleToolbar()
-  }
-  if (logseq.settings!.countSelected) {
-    countHighlighted()
-  }
+  if (logseq.settings!.toolbar) handleToolbar()
+  if (logseq.settings!.countSelected) countHighlighted()
 }
 
 logseq.useSettingsSchema(settings).ready(main).catch(console.error)

@@ -2,7 +2,7 @@ import '@logseq/libs'
 
 import { BlockEntity } from '@logseq/libs/dist/LSPlugin.user'
 
-import buttonCss from './index.css?raw'
+import css from './index.css?raw'
 import { mixedWordsFunction } from './services/countWords'
 import getCount from './services/getCount'
 import renderCount from './services/renderCount'
@@ -12,7 +12,7 @@ import { handlePopup } from './utils/handle-popup'
 const main = async () => {
   console.log('logseq-wordcount-plugin loaded')
 
-  logseq.provideStyle(buttonCss)
+  logseq.provideStyle(css)
   handlePopup()
 
   logseq.Editor.registerSlashCommand('Word count', async (e) => {

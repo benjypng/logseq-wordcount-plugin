@@ -32,7 +32,7 @@
     ]
   },
   "dependencies": {
-    "@logseq/libs": "^0.0.15",
+    "@logseq/libs": "^0.0.17",
     "rxjs": "^7.8.1",
     "words-count": "^2.0.2"
   },

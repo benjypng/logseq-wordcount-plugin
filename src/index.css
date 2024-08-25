@@ -1,24 +1,24 @@
 .wordcount-toolbar {
-  font-size: 0.7rem;
+  font-size: 0.9rem;
 }
 
 .wordcount-btn {
-  background-color: #eeeeee;    
-  color: #000000;    
+  background-color: #eeeeee;
+  color: #000000;
 
-  padding: 0 0.5rem;    
-  line-height: 1.5rem;    
-  border-right: solid 1px;    
-  border-bottom: solid 1px;    
-  border-radius: 10px;    
+  padding: 0 0.5rem;
+  line-height: 1.5rem;
+  border-right: solid 1px;
+  border-bottom: solid 1px;
+  border-radius: 10px;
 
-  font-family: "Inter", "Arial", sans-serif;
+  font-family: 'Inter', 'Arial', sans-serif;
   font-size: 0.75rem;
   font-weight: 500;
 }
 
 .wordcount-btn::before {
-  content: "🖋️";
+  content: '🖋️';
   visibility: visible;
   border-radius: 2px;
   padding: 2px;

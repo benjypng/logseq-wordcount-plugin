@@ -13,7 +13,7 @@ export const createWordcountText = (
       case type.startsWith(':wordcount_'):
         text = `${wordCountStr} ${totalCount}`
         break
-      case type.startsWith('wordcountchar_'):
+      case type.startsWith(':wordcountchar_'):
         text = `${characterCountStr} ${totalCount}`
         break
       default:

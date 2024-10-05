@@ -37,8 +37,8 @@ const main = async () => {
       })
       if (!headerBlock) return
 
-      switch (type) {
-        case `:wordcount_${uuid}`: {
+      switch (true) {
+        case type.startsWith(`:wordcount_`): {
           const totalCount = getCount(
             headerBlock.children as BlockEntity[],
             'words',
@@ -46,7 +46,7 @@ const main = async () => {
           renderButton(slot, wordcountId, type, totalCount, target)
           break
         }
-        case `:wordcountchar_${uuid}`: {
+        case type.startsWith(`:wordcountchar_`): {
           const totalCount = getCount(
             headerBlock.children as BlockEntity[],
             'chars',

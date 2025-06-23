@@ -22,7 +22,7 @@ export const createWordcountText = (
   } else {
     // Session text
     const sessionTarget = parseInt(target)
-    const percentage = (totalCount / sessionTarget) * 100
+    const percentage = ((totalCount / sessionTarget) * 100).toFixed(1)
 
     switch (true) {
       case type.startsWith(':wordcount_'):

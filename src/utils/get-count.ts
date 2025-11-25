@@ -7,6 +7,8 @@ export const getCount = (childrenArr: BlockEntity[], countWhat: string) => {
   if (countWhat === 'words') {
     const recurse = (childrenArr: BlockEntity[]) => {
       for (const child of childrenArr) {
+        if (!child.content) continue
+
         if (logseq.settings!.forceWordCount) {
           totalCount += simpleWordsFunction(child.content)
         } else {
@@ -22,6 +24,8 @@ export const getCount = (childrenArr: BlockEntity[], countWhat: string) => {
   } else if (countWhat === 'chars') {
     const recurse = (childrenArr: BlockEntity[]) => {
       for (const child of childrenArr) {
+        if (!child.content) continue
+
         totalCount += child.content.length
         if (child.children) {
           recurse(child.children as BlockEntity[])

@@ -14,7 +14,7 @@ import { handlePopup } from './utils/handle-popup'
 import { renderButton } from './utils/render-button'
 
 const main = async () => {
-  console.log('logseq-wordcount-plugin loaded')
+  logseq.UI.showMsg('logseq-wordcount-plugin loaded')
 
   logseq.provideStyle(css)
   handlePopup()

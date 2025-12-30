@@ -1,25 +1,47 @@
-.wordcount-toolbar {
-  font-size: 0.9rem;
+wordcount-toolbar {
+  font-size: 0.85rem;
+  opacity: 0.8; /* Slightly mute the toolbar to keep focus on content */
+  transition: opacity 0.2s ease;
+}
+
+wordcount-toolbar:hover {
+  opacity: 1;
 }
 
 .wordcount-btn {
-  background-color: #eeeeee;
-  color: #000000;
+  /* Use Logseq variables for dark/light mode compatibility */
+  background-color: var(--ls-secondary-background-color, #f3f4f6);
+  color: var(--ls-primary-text-color, #374151);
+  border: 1px solid var(--ls-border-color, #e5e7eb);
 
-  padding: 0 0.5rem;
-  line-height: 1.5rem;
-  border-right: solid 1px;
-  border-bottom: solid 1px;
-  border-radius: 10px;
+  /* Modern Spacing */
+  padding: 4px 10px;
+  line-height: 1.2;
+  border-radius: 6px; /* Standard UI radius */
 
-  font-family: 'Inter', 'Arial', sans-serif;
+  /* Typography */
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
+
+  /* Interaction */
+  cursor: default;
+  transition: all 0.2s ease;
 }
 
+.wordcount-btn:hover {
+  background-color: var(--ls-tertiary-background-color, #e5e7eb);
+  transform: translateY(-1px);
+}
+
+/* Replaced the Pen Emoji with a cleaner visual dot or removed entirely */
 .wordcount-btn::before {
-  content: '🖋️';
-  visibility: visible;
-  border-radius: 2px;
-  padding: 2px;
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: var(--ls-link-text-color, #106ba3);
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
 }

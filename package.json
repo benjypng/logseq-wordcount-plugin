@@ -10,10 +10,10 @@
     "main": "dist/index.html"
   },
   "scripts": {
-    "dev": "npx vite",
-    "build": "npx eslint . --fix && npx tsc && npx vite build",
-    "preview": "npx vite preview",
-    "build:css": "npx tailwindcss -i ./src/tailwind.css -o ./src/output.css",
+    "dev": "bunx vite",
+    "build": "bunx eslint . --fix && bunx tsc && bunx vite build",
+    "preview": "bunx vite preview",
+    "build:css": "bunx tailwindcss -i ./src/tailwind.css -o ./src/output.css",
     "prepare": "husky"
   },
   "release": {
@@ -32,7 +32,7 @@
     ]
   },
   "dependencies": {
-    "@logseq/libs": "^0.2.8",
+    "@logseq/libs": "^0.2.10",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "rxjs": "^7.8.2",

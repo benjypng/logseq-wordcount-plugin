@@ -5,3 +5,7 @@ export interface RendererEntry {
   uuid: string
   pageId?: number
 }
+
+export type DbChangeHandler = (
+  changedPageIds: Set<number>,
+) => void | Promise<unknown>

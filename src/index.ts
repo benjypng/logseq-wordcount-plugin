@@ -10,8 +10,10 @@ import { wordCount } from './features/word-count'
 import css from './index.css?raw'
 import { settings } from './settings'
 import { RendererEntry } from './types'
+import { onDbChange } from './utils/db-change-bus'
 import { getCount } from './utils/get-count'
 import { handlePopup } from './utils/handle-popup'
+import { isSlotMounted } from './utils/is-slot-mounted'
 import { renderButton } from './utils/render-button'
 
 const main = async () => {
@@ -33,6 +35,11 @@ const main = async () => {
       return
     }
     entry.pageId = headerBlock.page?.id
+
+    // Slot was torn down (block scrolled off / page changed). Skip rather than
+    // render into a dead slot; onMacroRendererSlotted re-renders with a fresh
+    // slot when the block remounts.
+    if (!isSlotMounted(slot)) return
 
     if (type.startsWith(`:wordcount_`)) {
       const totalCount = getCount(
@@ -67,37 +74,14 @@ const main = async () => {
     },
   )
 
-  let rerenderTimer: ReturnType<typeof setTimeout> | undefined // debounce
-  const pendingUuids = new Set<string>()
-  const offDbChanged = logseq.DB.onChanged(({ blocks }) => {
-    if (activeRenderers.size === 0) return
-
-    const changedPageIds = new Set(
-      blocks.map((b) => b.page?.id).filter((id): id is number => id != null),
+  // Re-render counters whose page was touched in the change burst. onDbChange
+  // handles the single shared subscription and debounce; we just filter the
+  // active renderers to the affected pages.
+  onDbChange((changedPageIds) => {
+    const entries = [...activeRenderers.values()].filter(
+      (entry) => entry.pageId != null && changedPageIds.has(entry.pageId),
     )
-    if (changedPageIds.size === 0) return
-
-    let queued = false
-    for (const entry of activeRenderers.values()) {
-      if (entry.pageId != null && changedPageIds.has(entry.pageId)) {
-        pendingUuids.add(entry.uuid)
-        queued = true
-      }
-    }
-    if (!queued) return
-
-    if (rerenderTimer) clearTimeout(rerenderTimer)
-    rerenderTimer = setTimeout(() => {
-      const entries = [...pendingUuids]
-        .map((u) => activeRenderers.get(u))
-        .filter((e): e is RendererEntry => e != null)
-      pendingUuids.clear()
-      void Promise.all(entries.map((entry) => renderWordcount(entry)))
-    }, 300)
-  })
-  logseq.beforeunload(async () => {
-    if (rerenderTimer) clearTimeout(rerenderTimer)
-    offDbChanged()
+    return Promise.all(entries.map((entry) => renderWordcount(entry)))
   })
 
   // Features

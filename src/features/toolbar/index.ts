@@ -1,3 +1,4 @@
+import { onDbChange } from '../../utils/db-change-bus'
 import { getCount } from '../../utils/get-count'
 
 const renderToolbarUI = (count: number) => {
@@ -8,8 +9,17 @@ const renderToolbarUI = (count: number) => {
 }
 
 export const handleToolbar = () => {
-  let count = 0
-  renderToolbarUI(count)
+  renderToolbarUI(0)
+
+  let currentName: string | undefined
+  let currentPageId: number | undefined
+
+  const refresh = async () => {
+    if (!currentName) return
+    const pbt = await logseq.Editor.getPageBlocksTree(currentName)
+    if (!pbt) return
+    renderToolbarUI(getCount(pbt, 'words'))
+  }
 
   logseq.App.onRouteChanged(
     async ({
@@ -17,21 +27,20 @@ export const handleToolbar = () => {
         path: { name },
       },
     }) => {
+      currentName = name
+      currentPageId = undefined
       if (!name) return
 
-      const pbt = await logseq.Editor.getPageBlocksTree(name)
-      if (!pbt) return
-      count = getCount(pbt, 'words')
-      renderToolbarUI(count)
+      await refresh()
 
       const page = await logseq.Editor.getPage(name)
-      if (!page) return
-      logseq.DB.onBlockChanged(page.uuid, async () => {
-        const pbt = await logseq.Editor.getPageBlocksTree(name)
-        if (!pbt) return
-        count = getCount(pbt, 'words')
-        renderToolbarUI(count)
-      })
+      currentPageId = page?.id
     },
   )
+
+  onDbChange((changedPageIds) => {
+    if (currentPageId != null && changedPageIds.has(currentPageId)) {
+      return refresh()
+    }
+  })
 }

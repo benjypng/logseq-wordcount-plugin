@@ -1,4 +1,2 @@
-echo 'Running npx eslint . --fix'
-npx eslint . --fix
-echo 'Running tsc'
-npx tsc
+#!/usr/bin/env sh
+npm run lint:precommit

@@ -20,7 +20,7 @@ wordcount-toolbar:hover {
   border-radius: 6px; /* Standard UI radius */
 
   /* Typography */
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
 
@@ -36,7 +36,7 @@ wordcount-toolbar:hover {
 
 /* Replaced the Pen Emoji with a cleaner visual dot or removed entirely */
 .wordcount-btn::before {
-  content: '';
+  content: "";
   display: inline-block;
   width: 6px;
   height: 6px;
